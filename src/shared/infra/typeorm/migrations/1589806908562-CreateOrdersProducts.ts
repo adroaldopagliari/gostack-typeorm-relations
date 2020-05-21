@@ -3,7 +3,7 @@ import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 export default class CreateOrdersProducts1589806908562
   implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
-    queryRunner.createTable(
+    await queryRunner.createTable(
       new Table({
         name: 'orders_products',
         columns: [
@@ -25,13 +25,12 @@ export default class CreateOrdersProducts1589806908562
           {
             name: 'price',
             type: 'decimal',
-            precision: 10,
-            scale: 4,
-            default: 0,
+            precision: 8,
+            scale: 2,
           },
           {
             name: 'quantity',
-            type: 'integer',
+            type: 'int',
           },
           {
             name: 'created_at',
@@ -42,6 +41,24 @@ export default class CreateOrdersProducts1589806908562
             name: 'updated_at',
             type: 'timestamp',
             default: 'now()',
+          },
+        ],
+        foreignKeys: [
+          {
+            name: 'ProductId',
+            columnNames: ['product_id'],
+            referencedColumnNames: ['id'],
+            referencedTableName: 'products',
+            onUpdate: 'CASCADE',
+            onDelete: 'SET NULL',
+          },
+          {
+            name: 'OrderId',
+            columnNames: ['order_id'],
+            referencedColumnNames: ['id'],
+            referencedTableName: 'orders',
+            onUpdate: 'CASCADE',
+            onDelete: 'SET NULL',
           },
         ],
       }),
